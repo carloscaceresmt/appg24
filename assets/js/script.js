@@ -1,6 +1,9 @@
 const endpoint = "http://localhost:8080/api/Client"
 $(document).ready(function() {
     getCliente()
+    $("#actualizar").click(function() {
+        actualizar()
+    })
 
 })
 
@@ -80,7 +83,7 @@ function actualizar() {
             contentType: 'application/json',
             complete: function(data) {
                 if (data.status == "201") {
-                    alert("Actualio Cliente con exito!!")
+                    alert("Actualizó Cliente con exito!!")
                 } else {
                     alert("Problemas al Actualizar consulte con el Administrador!!")
                 }
