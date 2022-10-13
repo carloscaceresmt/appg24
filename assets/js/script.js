@@ -31,13 +31,81 @@ function getCliente() {
                         "<td>" + client.password + "</td>" +
                         "<td>" + client.name + "</td>" +
                         "<td>" + client.age + "</td>" +
-                        "<td><button class='btn btn-warning'>Editar</button>" +
-                        "    <button class='btn btn-danger'>Eliminar</button></td>" +
+                        "<td>" +
+                        "<button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#modalactualizar'" +
+                        "onclick=\"ver('" + client.idClient + "','" + client.email + "','" + client.password + "','" + client.name + "','" + client.age + "')\"" +
+                        ">Actualizar</button>&nbsp;" +
+                        "<button class='btn btn-danger ml' " +
+                        "onclick=\"eliminar('" + client.idClient + "')\"" +
+                        ">Eliminar</button>" +
+                        "</td>" +
                         "</tr>"
                 })
                 $("#tbody").html(registro)
             }
         }
     });
+}
+/**
+ * actualizar registro
+ */
+function ver(idClient, email, password, name, age) {
+
+    $("#idclient").val(idClient)
+    $("#email").val(email)
+    $("#password").val(password)
+    $("#name").val(name)
+    $("#age").val(age)
+
+
+}
+
+function actualizar() {
+
+    let cliente = {
+        idClient: $("#idclient").val(),
+        email: $("#email").val(),
+        password: $("#password").val(),
+        name: $("#name").val(),
+        age: $("#age").val()
+    }
+    let dataJson = JSON.stringify(cliente)
+
+    if (confirm("Desea Actualizar el Registo ?")) {
+        $.ajax({
+            url: endpoint + "/update",
+            type: 'PUT',
+            data: dataJson,
+            dataType: 'json',
+            contentType: 'application/json',
+            complete: function(data) {
+                if (data.status == "201") {
+                    alert("Actualio Cliente con exito!!")
+                } else {
+                    alert("Problemas al Actualizar consulte con el Administrador!!")
+                }
+                getCliente()
+            }
+        })
+
+    }
+}
+
+/**
+ *Eliminar registro del cliente por id primary key 
+ */
+function eliminar(idClient) {
+    if (confirm("Desea Eliminar el Registro Id " + idClient + " ?.")) {
+        console.log(idClient)
+        $.ajax({
+            url: endpoint + "/" + idClient,
+            type: "DELETE",
+            dataType: 'json',
+            contentType: 'application/json',
+            complete: function(data) {
+                getCliente()
+            }
+        })
+    }
 
 }
